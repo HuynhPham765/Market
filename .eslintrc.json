@@ -1,21 +1,59 @@
 {
+  "parser": "babel-eslint",
+  "extends": [
+    "plugin:flowtype/recommended",
+    "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "prettier",
+    "prettier/flowtype",
+    "prettier/react"
+  ],
   "env": {
     "browser": true,
     "jest": true,
     "es6": true
   },
-  "plugins": ["import"],
-  "parser": "babel-eslint",
   // "extends": "eslint:recommended",
+  "plugins": ["flowtype", "react", "prettier"],
+  "globals": {
+    "document": false
+  },
   "parserOptions": {
     "ecmaVersion": 2018,
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true,
+      "experimentalDecorators": true
+    }
   },
   "rules": {
-    // "comma-dangle": ["error", "never"],
     "no-console": "warn",
     "no-eval": "error",
-    "import/first": "error"
-  },
-  "extends": ["plugin:prettier/recommended"]
+    "import/first": "error",
+    "no-unused-vars": 1,
+    "no-duplicate-imports": 0,
+    "import/no-duplicates": 2,
+    "import/named": 0,
+    "import/no-unresolved": "warn",
+    "no-restricted-imports": "warn",
+    "react/prop-types": [
+      1,
+      {
+        "skipUndeclared": true
+      }
+    ],
+    "react/display-name": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "tabWidth": 2,
+        "printWidth": 80,
+        "singleQuote": true,
+        "jsxBracketSameLine": true,
+        "trailingComma": "es5"
+      }
+    ]
+  }
 }
