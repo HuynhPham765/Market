@@ -2,6 +2,7 @@ import * as firebase from 'firebase';
 
 import { StyleSheet, Text, View } from 'react-native';
 
+import Home from './src/screens/Home/Home';
 import Loading from './src/screens/Loading/Loading';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
@@ -28,10 +29,10 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Loading">
-        <Stack.Screen name="Loading" component={Loading}></Stack.Screen>
+      <Stack.Navigator initialRouteName="SignInSignUp">
+        {/* <Stack.Screen name="Loading" component={Loading}></Stack.Screen> */}
         <Stack.Screen
-          name="SignIn"
+          name="SignInSignUp"
           component={SignInSignUp}
           options={{
             headerTitleAlign: 'center',
@@ -45,7 +46,7 @@ export default function App() {
             },
           }}
         ></Stack.Screen>
-        {/* <Stack.Screen name="SignUp" component={SignUp}></Stack.Screen> */}
+        <Stack.Screen name="Home" component={Home}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

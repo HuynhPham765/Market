@@ -1,28 +1,46 @@
 import * as React from 'react';
 
 import { Dimensions, Image, KeyboardAvoidingView, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { SceneMap, TabView } from "react-native-tab-view";
+import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 
 import { ScrollView } from "react-native-gesture-handler";
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import logoSrc from '../../images/logo.png';
 import { themeConfig } from '../../config/themeConfig';
+import { useNavigation } from '@react-navigation/native';
 
 const SignInSignUp = (props) => {
+  const navigation = useNavigation();
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  });
   
   const initialLayout = { width: Dimensions.get('window').width };
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'first', title: 'First' },
-    { key: 'second', title: 'Second' },
+    { key: 'first', title: 'Đăng Nhập' },
+    { key: 'second', title: 'Đăng Kí' },
   ]);
  
   const renderScene = SceneMap({
     first: SignIn,
     second: SignUp,
   });
+
+  const renderTabBar = props => (
+    <TabBar
+      {...props}
+      activeColor={themeConfig.color.primary_button}
+      inactiveColor={themeConfig.color.black}
+      indicatorStyle={{ backgroundColor: themeConfig.color.primary_button }}
+      style={{ backgroundColor: '#EEE'}}
+    />
+  );
   
   return (
     <SafeAreaView
@@ -58,6 +76,7 @@ const SignInSignUp = (props) => {
           </View>
           <View style={{flex:1, margin: 20}}>
               <TabView
+                renderTabBar={renderTabBar}
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
                 onIndexChange={setIndex}

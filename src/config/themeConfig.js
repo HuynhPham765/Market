@@ -1,10 +1,12 @@
 const { Dimensions } = require('react-native');
 export const themeConfig = {
   color: {
-    primary_button: '#0066FF',
+    primary_button: '#008cf8',
     primary_button_disable: '#CCCCCC',
     secondary_button: '#DD0000',
     white: '#EEEEEE',
+    black: '#000000',
+    text_disable: '#999999',
   },
   spacing: {
     spacing_xxs: 2,

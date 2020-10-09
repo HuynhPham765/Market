@@ -1,4 +1,5 @@
 import {
+  Alert,
   Dimensions,
   Image,
   StyleSheet,
@@ -7,9 +8,12 @@ import {
 } from 'react-native';
 
 import InputField from '../../../components/InputField';
+import MyButton from '../../../components/MyButton';
 import React from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ResponseStatus } from '../../../services/enum/ResponseStatus';
+import { isEmpty } from 'lodash';
 import passwordSrc from '../../../images/password.png';
+import { signInWithEmail } from '../../../services/authServices';
 import { themeConfig } from '../../../config/themeConfig';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -17,11 +21,51 @@ import usernameSrc from '../../../images/username.png';
 
 const SignIn = () => {
   const navigation = useNavigation();
-  navigation.setOptions({
-    headerShown: false,
-  });
-  const [] = useState('');
-  const [] = useState('');
+  const [email, setEmail] = useState('');
+  const [disableEmailError, setDisableEmailError] = useState(true);
+  const [emailError, setEmailError] = useState('');
+  const [password, setPassword] = useState('');
+  const [disablePasswordError, setDisablePasswordError] = useState(true);
+  const [passwordError, setPasswordError] = useState('');
+
+  const onEmailChange = (value) => {
+    setEmail(value);
+    setDisableEmailError(true);
+  }
+
+  const onPasswordChange = (value) => {
+    setPassword(value);
+    setDisablePasswordError(true);
+  }
+
+  const checkValidate = () => {
+    let isError = false;
+
+    if (isEmpty(email)) {
+      isError = true;
+      setEmailError('Hãy nhập email');
+      setDisableEmailError(false);
+    }
+
+    if (isEmpty(password)) {
+      isError = true;
+      setPasswordError('Hãy nhập mật khẩu');
+      setDisablePasswordError(false);
+    }
+
+    return isError;
+  }
+
+  const handleSignIn = async () => {
+    if(!checkValidate()) {
+      const res = await signInWithEmail({email, password});
+      if (res && res.user) {
+        navigation.navigate('Home');
+      } else {
+        Alert.alert('Error', res.message);
+      }
+    }
+  }
 
   return (
     <View
@@ -33,22 +77,32 @@ const SignIn = () => {
       }}
     >
       <InputField
+        value={email}
+        onChangeText={onEmailChange}
         style={{marginTop: themeConfig.spacing.spacing_xl}}
         isShowInputIcon={true}
         inputIconSrc={usernameSrc}
         placeholder="Email"
-        placeholderTextColor="#000"
+        keyboardType="email-address"
+        disableError={disableEmailError}
+        error={emailError}
+        placeholderTextColor={themeConfig.color.text_disable}
       />
       <InputField
+        value={password}
+        onChangeText={onPasswordChange}
         style={{marginTop: themeConfig.spacing.spacing_xl}}
         isShowInputIcon={true}
         inputIconSrc={passwordSrc}
-        placeholder="Mat Khau"
-        placeholderTextColor="#000"
+        placeholder="Mật khẩu"
+        disableError={disablePasswordError}
+        error={passwordError}
+        placeholderTextColor={themeConfig.color.text_disable}
       />
-      <TouchableOpacity style={styles.button}>
-        <Text> DD </Text>
-      </TouchableOpacity>
+      <MyButton
+        title="Đăng Nhập"
+        onClick={handleSignIn}
+      />
     </View>
   );
 };

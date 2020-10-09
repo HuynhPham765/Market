@@ -1,22 +1,67 @@
 import {
-  Button,
-  Dimensions,
-  StyleSheet,
-  Text,
+  Alert,
   View,
 } from 'react-native';
 
+import AwesomeAlert from 'react-native-awesome-alerts';
 import InputField from '../../../components/InputField';
+import MyButton from '../../../components/MyButton';
 import React from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { isEmpty } from "lodash";
 import passwordSrc from '../../../images/password.png';
+import { signUpWithEmail } from '../../../services/authServices';
 import { themeConfig } from '../../../config/themeConfig';
+import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import usernameSrc from '../../../images/username.png';
 
 const SignUp = () => {
-  const [] = useState('');
-  const [] = useState('');
+  const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [disableEmailError, setDisableEmailError] = useState(true);
+  const [emailError, setEmailError] = useState('');
+  const [password, setPassword] = useState('');
+  const [disablePasswordError, setDisablePasswordError] = useState(true);
+  const [passwordError, setPasswordError] = useState('');
+
+  const onEmailChange = (value) => {
+    setEmail(value);
+    setDisableEmailError(true);
+  }
+
+  const onPasswordChange = (value) => {
+    setPassword(value);
+    setDisablePasswordError(true);
+  }
+
+  const checkValidate = () => {
+    let isError = false;
+
+    if (isEmpty(email)) {
+      isError = true;
+      setEmailError('Hãy nhập email');
+      setDisableEmailError(false);
+    }
+
+    if (isEmpty(password)) {
+      isError = true;
+      setPasswordError('Hãy nhập mật khẩu');
+      setDisablePasswordError(false);
+    }
+
+    return isError;
+  }
+
+  const handleSignUp = async () => {
+    if(!checkValidate()) {
+      const res = await signUpWithEmail({email, password});
+      if (res && res.user) {
+        //do something
+      } else {
+        Alert.alert('Error', res.message);
+      }
+    }
+  }
 
   return (
     <View
@@ -28,38 +73,33 @@ const SignUp = () => {
       }}
     >
       <InputField
+        value={email}
         style={{marginTop: themeConfig.spacing.spacing_xl}}
         isShowInputIcon={true}
         inputIconSrc={usernameSrc}
         placeholder="Email"
-        placeholderTextColor="#000"
+        disableError={disableEmailError}
+        error={emailError}
+        placeholderTextColor={themeConfig.color.text_disable}
+        onChangeText={onEmailChange}
       />
       <InputField
+        value={password}
         style={{marginTop: themeConfig.spacing.spacing_xl}}
         isShowInputIcon={true}
         inputIconSrc={passwordSrc}
-        placeholder="Mật Khẩu"
-        placeholderTextColor="#000"
+        placeholder="Mật khẩu"
+        disableError={disablePasswordError}
+        error={passwordError}
+        placeholderTextColor={themeConfig.color.text_disable}
+        onChangeText={onPasswordChange}
       />
-      <TouchableOpacity style={styles.button}>
-        <Text textAlign="center">My button</Text>
-      </TouchableOpacity>
+      <MyButton
+        title="Đăng Kí"
+        onClick={handleSignUp}
+      />
     </View>
   );
 };
-
-const DEVICE_WIDTH = Math.round(Dimensions.get('window').width);
-const styles = StyleSheet.create({
-  button: {
-    // textAlign: 'center',
-    backgroundColor: '#0066FF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 50,
-    // marginHorizontal: 20,
-    // marginVertical: 20,
-    borderRadius: 5,
-  },
-});
 
 export default SignUp;

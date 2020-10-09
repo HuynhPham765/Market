@@ -1,6 +1,6 @@
 import React from 'react';
 import { themeConfig } from '../config/themeConfig';
-const { View, Image, StyleSheet, Dimensions } = require('react-native');
+const { View, Image, StyleSheet, Dimensions, Text } = require('react-native');
 const { TextInput } = require('react-native-gesture-handler');
 
 function InputField(props) {
@@ -9,31 +9,41 @@ function InputField(props) {
     inputIconSrc,
     isShowInputText,
     showInputTextIconSrc,
-    onChangeText,
     style,
+    disableError = true,
+    error = '',
     ...inputProps
   } = props;
 
   return (
     <View
-      style={{
-        ...style,
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'stretch'
-      }}
+      style={{flex: 1}}
     >
-      {isShowInputIcon && (
-        <Image style={styles.inlineImg} source={inputIconSrc} />
+      <View
+        style={{
+          ...style,
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'stretch'
+        }}
+      >
+        {isShowInputIcon && (
+          <Image style={styles.inlineImg} source={inputIconSrc} />
+        )}
+        <TextInput
+          {...inputProps}
+          style={{
+            ...styles.input,
+            borderColor: disableError ? themeConfig.color.primary_button : themeConfig.color.secondary_button,
+          }}
+          // placeholderTextColor="black"
+          // placeholder="lllll"
+          underlineColorAndroid="transparent"
+        />
+      </View>
+      {!disableError && (
+        <Text style={styles.error}>{error}</Text>
       )}
-      <TextInput
-        {...inputProps}
-        style={styles.input}
-        // placeholderTextColor="black"
-        // placeholder="lllll"
-        underlineColorAndroid="transparent"
-        onChangeText={onChangeText}
-      />
     </View>
   );
 }
@@ -43,11 +53,8 @@ const styles = StyleSheet.create({
     backgroundColor: themeConfig.color.white,
     flex: 1,
     height: 50,
-    // marginHorizontal: themeConfig.spacing.spacing_lg,
-    // marginVertical: themeConfig.spacing.spacing_lg,
     paddingLeft: 45,
-    borderRadius: 20,
-    borderColor: themeConfig.color.primary_button,
+    borderRadius: 5,
     borderWidth: 1,
   },
   inlineImg: {
@@ -62,6 +69,11 @@ const styles = StyleSheet.create({
     left: 15,
     top: 6,
   },
+  error: {
+    color: themeConfig.color.secondary_button,
+    paddingLeft: 15,
+    paddingTop: 5,
+  }
 });
 
 export default InputField;
