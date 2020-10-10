@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { Dimensions, Image, KeyboardAvoidingView, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { SceneMap, TabBar, TabView } from "react-native-tab-view";
+import { Dimensions, Image, KeyboardAvoidingView, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from 'react-native-gesture-handler';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import logoSrc from '../../images/logo.png';
@@ -18,7 +18,7 @@ const SignInSignUp = (props) => {
       headerShown: false,
     });
   });
-  
+
   const initialLayout = { width: Dimensions.get('window').width };
 
   const [index, setIndex] = React.useState(0);
@@ -26,22 +26,22 @@ const SignInSignUp = (props) => {
     { key: 'first', title: 'Đăng Nhập' },
     { key: 'second', title: 'Đăng Kí' },
   ]);
- 
+
   const renderScene = SceneMap({
     first: SignIn,
     second: SignUp,
   });
 
-  const renderTabBar = props => (
+  const renderTabBar = (props) => (
     <TabBar
       {...props}
       activeColor={themeConfig.color.primary_button}
       inactiveColor={themeConfig.color.black}
       indicatorStyle={{ backgroundColor: themeConfig.color.primary_button }}
-      style={{ backgroundColor: '#EEE'}}
+      style={{ backgroundColor: '#EEE' }}
     />
   );
-  
+
   return (
     <SafeAreaView
       style={{
@@ -63,31 +63,32 @@ const SignInSignUp = (props) => {
             flex: 1,
           }}
         >
-          <View style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            margin: 20,
-            marginTop: 100,
-          }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: 20,
+              marginTop: 100,
+            }}
+          >
             <Image source={logoSrc} style={styles.image} />
             <Text style={styles.text}> H & N Market </Text>
-            
           </View>
-          <View style={{flex:1, margin: 20}}>
-              <TabView
-                renderTabBar={renderTabBar}
-                navigationState={{ index, routes }}
-                renderScene={renderScene}
-                onIndexChange={setIndex}
-                initialLayout={initialLayout}
-              />
-            </View>
+          <View style={{ flex: 1, margin: 20 }}>
+            <TabView
+              renderTabBar={renderTabBar}
+              navigationState={{ index, routes }}
+              renderScene={renderScene}
+              onIndexChange={setIndex}
+              initialLayout={initialLayout}
+            />
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   image: {
@@ -99,8 +100,8 @@ const styles = StyleSheet.create({
   text: {
     color: themeConfig.color.primary_button,
     fontSize: 20,
-    fontWeight: "bold"
-  }
+    fontWeight: 'bold',
+  },
 });
 
 export default SignInSignUp;
